@@ -38,8 +38,8 @@ app.get('/compose', (req, res) => {
 
 app.post('/compose', (req, res) => {
   const post = {
-    Title: req.body.postTitle,
-    Body: req.body.postContent
+    title: req.body.postTitle,
+    body: req.body.postContent
   };
 
   posts.push(post);
@@ -47,14 +47,17 @@ app.post('/compose', (req, res) => {
 });
 
 app.get('/posts/:title', (req, res) => {
-  const matchedPost = posts.find((post) => {
-    return _.lowerCase(post.Title) === _.lowerCase(req.params.title)
+  let matchedPost = posts.find((post) => {
+    return _.lowerCase(post.title) === _.lowerCase(req.params.title)
   })
 
   if (!matchedPost) {
-    console.log('No match found')
+    res.render('post', {
+      title: 'Oops!',
+      body: 'The post that you are looking for was not found.'
+    })
   } else {
-    console.log('Match found!')
+    res.render('post', matchedPost)
   }
 })
 
